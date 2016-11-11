@@ -1,3 +1,7 @@
 .label {
-     -fx-font: 22px "Sans";
+     -fx-font: 16px "Sans";
+}
+
+.table-view .column-header{
+    -fx-font-size: 14;
 }
