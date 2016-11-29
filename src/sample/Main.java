@@ -3,9 +3,11 @@ package sample;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -25,11 +27,12 @@ public class Main extends Application {
     // TODO - how to make this responsive to window changes?
     @Override
     public void start(Stage window) throws Exception{
-        // TODO - how to extract most of this so it's not as messy as it is now
         window.setTitle("moneyTracker");
 
-        TransactionForm transactionForm = new TransactionForm();
-        Scene scene = new Scene(transactionForm.build(), 400, 300);
+        //TransactionForm transactionForm = new TransactionForm();
+        //Scene scene = new Scene(transactionForm.build(), 400, 300);
+        Parent root = FXMLLoader.load(getClass().getResource("transaction_form.fxml"));
+        Scene scene = new Scene(root, 400, 300);
         scene.getStylesheets().add("sample/assets/styles.css");
 
         window.setScene(scene);
