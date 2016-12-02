@@ -11,12 +11,12 @@
           xmlns:fx="http://javafx.com/fxml"
           alignment="center"
           hgap="10" vgap="10"
-          gridLinesVisible="true">
-    <fx:script>
+          gridLinesVisible="false">
+    <!--<fx:script>
         function handleSubmitButtonAction() {
         resultMessage.setText("Calling the JavaScript");
         }
-    </fx:script>
+    </fx:script>-->
     <padding>
         <Insets top="25" right="25" bottom="10" left="25"/>
     </padding>
@@ -26,14 +26,21 @@
     <Label text="Amount:"
            GridPane.columnIndex="0" GridPane.rowIndex="1" />
     <TextField
+            fx:id="amount"
             GridPane.columnIndex="1" GridPane.rowIndex="1" />
     <Label text="Category:"
            GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <TextField
+            fx:id="category"
             GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <Button text="Sign In"
-            onAction="handleSubmitButtonAction()"
+    <Button text="Add"
+            onAction="#handleSubmitButtonAction"
             GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-    <Text fx:id="resultMessage"
-            GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <Text fx:id="resultMessage"  styleClass="fade"
+            GridPane.columnIndex="0" GridPane.rowIndex="5"
+            GridPane.columnSpan="2"
+            />
+    <Text fx:id="transactionOutput" styleClass="transaction"
+            GridPane.columnIndex="0" GridPane.rowIndex="4"
+            GridPane.columnSpan="2"/>
 </GridPane>

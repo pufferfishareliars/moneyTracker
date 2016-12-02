@@ -1,0 +1,7 @@
+/* TODO - add fading out animation */
+Text.fade {
+    -fx-fill: blue;
+}
+Text.transaction {
+    -fx-fill: grey;
+}
