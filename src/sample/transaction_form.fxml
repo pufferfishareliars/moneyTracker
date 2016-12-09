@@ -1,46 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
 <?language javascript?>
+-->
+<?package sample.views?>
 
-<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import sample.models.Transaction?>
+<?import javafx.collections.FXCollections?>
 
-<GridPane fx:controller="sample.Controller"
-          xmlns:fx="http://javafx.com/fxml"
-          alignment="center"
-          hgap="10" vgap="10"
-          gridLinesVisible="false">
-    <!--<fx:script>
-        function handleSubmitButtonAction() {
-        resultMessage.setText("Calling the JavaScript");
-        }
-    </fx:script>-->
-    <padding>
-        <Insets top="25" right="25" bottom="10" left="25"/>
-    </padding>
-    <Text text="Add your monthly expenses"
-          GridPane.columnIndex="0" GridPane.rowIndex="0"
-          GridPane.columnSpan="2" />
-    <Label text="Amount:"
-           GridPane.columnIndex="0" GridPane.rowIndex="1" />
-    <TextField
-            fx:id="amount"
-            GridPane.columnIndex="1" GridPane.rowIndex="1" />
-    <Label text="Category:"
-           GridPane.columnIndex="0" GridPane.rowIndex="2" />
-    <TextField
-            fx:id="category"
-            GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <Button text="Add"
-            onAction="#handleSubmitButtonAction"
-            GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-    <Text fx:id="resultMessage"  styleClass="fade"
-            GridPane.columnIndex="0" GridPane.rowIndex="5"
-            GridPane.columnSpan="2"
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<TabPane fx:controller="sample.Controller"
+         xmlns:fx="http://javafx.com/fxml">
+    <Tab text="Add">
+        <GridPane
+                alignment="center"
+                hgap="10" vgap="10"
+                gridLinesVisible="false">
+            <!--<fx:script>
+                function handleSubmitButtonAction() {
+                resultMessage.setText("Calling the JavaScript");
+                }
+            </fx:script>-->
+            <padding>
+                <Insets top="25" right="25" bottom="10" left="25"/>
+            </padding>
+            <Text text="Add your monthly expenses"
+                  GridPane.columnIndex="0" GridPane.rowIndex="0"
+                  GridPane.columnSpan="2"/>
+            <Label text="Amount:"
+                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField
+                    fx:id="amount"
+                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Label text="Category:"
+                   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField
+                    fx:id="category"
+                    GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <Button text="Add"
+                    onAction="#handleSubmitButtonAction"
+                    GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <Text fx:id="resultMessage" styleClass="fade"
+                  GridPane.columnIndex="0" GridPane.rowIndex="5"
+                  GridPane.columnSpan="2"
             />
-    <Text fx:id="transactionOutput" styleClass="transaction"
-            GridPane.columnIndex="0" GridPane.rowIndex="4"
-            GridPane.columnSpan="2"/>
-</GridPane>
+            <Text fx:id="transactionOutput" styleClass="transaction"
+                  GridPane.columnIndex="0" GridPane.rowIndex="4"
+                  GridPane.columnSpan="2" />
+        </GridPane>
+    </Tab>
+    <Tab text="View">
+        <StackPane>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <!-- WHY ISN"T THE LABEL SHOWING UP? -->
+            <Label text="HTransactions" alignment="TOP_CENTER"/>
+            <TableView fx:id="transactionTable">
+                <columns>
+                    <TableColumn text="category">
+                        <cellValueFactory><PropertyValueFactory property="category" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="amount">
+                        <cellValueFactory><PropertyValueFactory property="amount" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <Transaction category="Jacob" amount="5.00" />
+                        <Transaction category="Isabella" amount="1.34"/>
+                        <Transaction category="Ethan" amount="8.54"/>
+                        <Transaction category="Emma" amount="34.55"/>
+                        <Transaction category="Michael" amount="43.25"/>
+                    </FXCollections>
+                </items>
+            </TableView>
+        </StackPane>
+    </Tab>
+</TabPane>
