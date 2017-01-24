@@ -1,34 +1,28 @@
 package sample.models;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-// reference is https://docs.oracle.com/javafx/2/fxml_get_started/fxml_tutorial_intermediate.htm
+// reference is https://docs.oracle.com/javafx/2/fxml_get_started/fxml_tutorial_doubleermediate.htm
+// TODO - add support for date
 public class Transaction {
     private final SimpleStringProperty category = new SimpleStringProperty("");
-    // TODO - WHEN SETTING THIS TO SimpleDoubleProperty, we get an error about the FXML loader not finding the amount property
-    private final SimpleStringProperty amount = new SimpleStringProperty("");
+    private final SimpleDoubleProperty amount = new SimpleDoubleProperty(0);
+
+    //
+    // Constructors
+    //
 
     public Transaction() {
-        this("", ""); // WHY DO WE NEED THIS?
+        this("", 0); // WHY DO WE NEED THIS?
     }
 
-    public Transaction(String category, String amount) {
+    public Transaction(String category, double amount) {
         setCategory(category);
         setAmount(amount);
     }
-
-    //
-    // Property binding needed for ...? something
-    //
-
-/*    public SimpleDoubleProperty amountProperty() {
-        return this.amount;
-    }
-
-    public SimpleStringProperty categoryProperty() {
-        return this.category;
-    }*/
 
     //
     // Getters and Setters
@@ -42,11 +36,22 @@ public class Transaction {
         this.category.set(category);
     }
 
-    public String getAmount() {
+    public double getAmount() {
         return this.amount.get();
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(double amount) {
         this.amount.set(amount);
+    }
+
+    //
+    // Properties
+    //
+    public StringProperty categoryProperty() {
+        return category;
+    }
+
+    public DoubleProperty amountProperty() {
+        return amount;
     }
 }
