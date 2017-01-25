@@ -6,17 +6,26 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.models.Transaction;
+import sample.models.TransactionDataList;
 import sample.views.EditTransactionController;
 import sample.views.TransactionFormController;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 // continue from http://code.makery.ch/library/javafx-8-tutorial/part2/
-// TODO - hook this up to a DB to persist the data!
+// TODO - fix some of the UI
+// TODO - ask if we want to save data when exiting
+// TODO - add support for dates
 public class Main extends Application {
     private ObservableList<Transaction> transactionData = FXCollections.observableArrayList();
 
@@ -29,6 +38,7 @@ public class Main extends Application {
         this.primaryStage.setTitle("moneyTracker");
 
         initRootLayout();
+        retrieveExistingData();
     }
 
     /**
@@ -52,6 +62,14 @@ public class Main extends Application {
             this.primaryStage.show();
         }  catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void retrieveExistingData() {
+        // Try to load last opened person file.
+        File file = getTransactionFilePath();
+        if (file != null) {
+            loadTransactionDataFromFile(file);
         }
     }
 
@@ -107,6 +125,107 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+
+    /**
+     * Sets the file path of the currently loaded file. The path is persisted in
+     * the OS specific registry.
+     *
+     * @param file the file or null to remove the path
+     */
+    public void setTransactionFilePath(File file) {
+        Preferences prefs = Preferences.userNodeForPackage(Main.class);
+        if (file != null) {
+            prefs.put("filePath", file.getPath());
+
+            // Update the stage title.
+            primaryStage.setTitle("Transactions - " + file.getName());
+        } else {
+            prefs.remove("filePath");
+
+            // Update the stage title.
+            primaryStage.setTitle("MoneyTrackerApp");
+        }
+    }
+
+    /**
+     * Returns the file preference, i.e. the file that was last opened.
+     * The preference is read from the OS specific registry. If no such
+     * preference can be found, null is returned.
+     *
+     * @return
+     */
+    public File getTransactionFilePath() {
+        Preferences prefs = Preferences.userNodeForPackage(Main.class);
+        String filePath = prefs.get("filePath", null);
+        if (filePath != null) {
+            return new File(filePath);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Saves the current transaction data to the specified file.
+     *
+     * @param file
+     */
+    public void saveTransactionDataToFile(File file) {
+        try {
+            JAXBContext context = JAXBContext
+                    .newInstance(TransactionDataList.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+            // Wrapping our person data.
+            TransactionDataList wrapper = new TransactionDataList();
+            wrapper.setTransactions(this.transactionData);
+
+            // Marshalling and saving XML to the file.
+            m.marshal(wrapper, file);
+
+            // Save the file path to the registry.
+            setTransactionFilePath(file);
+        } catch (Exception e) { // catches ANY exception
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Could not save data");
+            alert.setContentText("Could not save data to file:\n" + file.getPath());
+
+            alert.showAndWait();
+        }
+    }
+
+    /**
+     * Loads person data from the specified file. The current person data will
+     * be replaced.
+     *
+     * @param file
+     */
+    public void loadTransactionDataFromFile(File file) {
+        try {
+            JAXBContext context = JAXBContext
+                    .newInstance(TransactionDataList.class);
+            Unmarshaller um = context.createUnmarshaller();
+
+            // Reading XML from the file and unmarshalling.
+            TransactionDataList wrapper = (TransactionDataList) um.unmarshal(file);
+
+            transactionData.clear();
+            transactionData.addAll(wrapper.getTransactions());
+
+            // Save the file path to the registry.
+            setTransactionFilePath(file);
+
+        } catch (Exception e) { // catches ANY exception
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Could not load data");
+            alert.setContentText("Could not load data from file:\n" + file.getPath());
+
+            alert.showAndWait();
         }
     }
 }

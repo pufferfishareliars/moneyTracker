@@ -8,8 +8,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import sample.Main;
 import sample.models.Transaction;
+
+import java.io.File;
 
 // TODO - add support for date
 // TODO - add support for pressing enter on the keyboard for submit
@@ -40,10 +43,29 @@ public class TransactionFormController {
         category.setText("");
     }
 
-    // TODO
     @FXML
     protected void saveTransactionTable(ActionEvent event) {
+            File transactionFile = app.getTransactionFilePath();
+            if (transactionFile != null) {
+                app.saveTransactionDataToFile(transactionFile);
+            } else {
+                FileChooser fileChooser = new FileChooser();
+                // Set extension filter
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                        "XML files (*.xml)", "*.xml");
+                fileChooser.getExtensionFilters().add(extFilter);
 
+                // Show save file dialog
+                File file = fileChooser.showSaveDialog(app.getPrimaryStage());
+
+                if (file != null) {
+                    // Make sure it has the correct extension
+                    if (!file.getPath().endsWith(".xml")) {
+                        file = new File(file.getPath() + ".xml");
+                    }
+                    app.saveTransactionDataToFile(file);
+                };
+            }
     }
 
     /**
