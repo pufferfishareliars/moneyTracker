@@ -1,27 +1,29 @@
 package sample.models;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
-// reference is https://docs.oracle.com/javafx/2/fxml_get_started/fxml_tutorial_doubleermediate.htm
-// TODO - add support for date
+import java.util.Date;
+
 public class Transaction {
     private final SimpleStringProperty category = new SimpleStringProperty("");
     private final SimpleDoubleProperty amount = new SimpleDoubleProperty(0);
+    // TODO - confirm if we nee default property
+    private final SimpleObjectProperty<Date> dateAdded = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Date> dateMade = new SimpleObjectProperty<>();
 
     //
     // Constructors
     //
 
     public Transaction() {
-        this("", 0); // WHY DO WE NEED THIS?
+        this("", 0, new Date(), new Date()); // WHY DO WE NEED THIS?
     }
 
-    public Transaction(String category, double amount) {
+    public Transaction(String category, double amount, Date dateAdded, Date dateMade) {
         setCategory(category);
         setAmount(amount);
+        setDateAdded(dateAdded);
+        setDateMade(dateMade);
     }
 
     //
@@ -44,6 +46,24 @@ public class Transaction {
         this.amount.set(amount);
     }
 
+    public Date getDateAdded() {
+        return this.dateAdded.get();
+    }
+
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded.set(dateAdded);
+    }
+
+    public Date getDateMade() {
+        return this.dateMade.get();
+    }
+
+    public void setDateMade(Date dateMade) {
+        this.dateMade.set(dateMade);
+    }
+
+
     //
     // Properties
     //
@@ -53,5 +73,13 @@ public class Transaction {
 
     public DoubleProperty amountProperty() {
         return amount;
+    }
+
+    public ObjectProperty<Date> dateAddedProperty() {
+        return dateAdded;
+    }
+
+    public ObjectProperty<Date> dateMadeProperty() {
+        return dateMade;
     }
 }

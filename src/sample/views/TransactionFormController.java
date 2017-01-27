@@ -1,7 +1,5 @@
 package sample.views;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,7 +10,13 @@ import javafx.stage.FileChooser;
 import sample.Main;
 import sample.models.Transaction;
 
+import java.awt.*;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 // TODO - add support for date
 // TODO - add support for pressing enter on the keyboard for submit
@@ -20,7 +24,7 @@ public class TransactionFormController {
     @FXML
     Text resultMessage, transactionOutput;
     @FXML
-    TextField amount, category;
+    TextField amount, category, dateMade;
     @FXML
     TableView<Transaction> transactionTable;
 
@@ -28,10 +32,20 @@ public class TransactionFormController {
 
     @FXML
     protected void handleSubmitButtonAction(ActionEvent event) {
-        // add to the table
-        System.out.printf("amount = %s\ncategory = %s\n", amount.getText(), category.getText());
-        // TODO - add validation for the parseDouble() call
-        Transaction inputTransaction = new Transaction(category.getText(), Double.parseDouble(amount.getText()));
+        // TODO - validation should be in separate message
+        Date dateTransactionMade;
+        try {
+            dateTransactionMade = parseDate(dateMade.getText());
+        } catch(ParseException e) {
+            transactionOutput.setText("Invalid date format, please use MMMM d, YYYY");
+            return;
+        }
+        Transaction inputTransaction = new Transaction(
+                category.getText(),
+                Double.parseDouble(amount.getText()),
+                new Date(),
+                dateTransactionMade
+        );
         transactionTable.getItems().add(inputTransaction);
 
         // display an output message
@@ -41,6 +55,19 @@ public class TransactionFormController {
         // set the fields back to nothing
         amount.setText("");
         category.setText("");
+    }
+
+    // TODO - should be abstracted into static instance
+    private Date parseDate(String dateAsString) throws ParseException{
+        DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        Date tmpDate;
+
+        try {
+            tmpDate = format.parse(dateAsString);
+        } catch (ParseException e) {
+            throw new ParseException("Couldn't parse date.  Need better validation or UI to limit input space", 0);
+        }
+        return tmpDate;
     }
 
     @FXML

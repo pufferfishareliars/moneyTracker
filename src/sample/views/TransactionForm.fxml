@@ -32,9 +32,11 @@
             <TextField fx:id="amount" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Category:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
             <TextField fx:id="category" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button onAction="#handleSubmitButtonAction" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Date Made:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <TextField fx:id="dateMade" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button onAction="#handleSubmitButtonAction" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Text fx:id="resultMessage" styleClass="fade" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="5" />
-            <Text fx:id="transactionOutput" styleClass="transaction" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <Text fx:id="transactionOutput" styleClass="transaction" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
          <columnConstraints>
             <ColumnConstraints />
             <ColumnConstraints />
@@ -65,8 +67,13 @@
                         <cellValueFactory><PropertyValueFactory property="category" />
                         </cellValueFactory>
                     </TableColumn>
+                    <!-- TODO - get date to display better -->
                     <TableColumn text="amount">
                         <cellValueFactory><PropertyValueFactory property="amount" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="date added">
+                        <cellValueFactory><PropertyValueFactory property="dateAdded" />
                         </cellValueFactory>
                     </TableColumn>
                 </columns>
